@@ -68,3 +68,14 @@ function isAuthenticated(req, res, next) {
     Page.delete(url);
     res.redirect('/');
   });
+
+  router.get('/', (req, res) => {
+    const pages = Page.list();
+    res.render('index', { pages });
+  });
+
+  router.get('/:url', (req, res) => {
+    const url = req.params.url;
+    const content = Page.read(url);
+    res.render('page', { content });
+  });
