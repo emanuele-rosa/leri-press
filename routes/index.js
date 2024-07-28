@@ -31,3 +31,7 @@ function isAuthenticated(req, res, next) {
     req.session.destroy();
     res.redirect('/login');
   });
+  
+  router.get('/admin', isAuthenticated, (req, res) => {
+    res.render('admin');
+  });
