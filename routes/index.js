@@ -62,3 +62,9 @@ function isAuthenticated(req, res, next) {
     Page.update(url, content);
     res.redirect('/');
   });
+
+  router.get('/delete/:url', isAuthenticated, (req, res) => {
+    const url = req.params.url;
+    Page.delete(url);
+    res.redirect('/');
+  });
