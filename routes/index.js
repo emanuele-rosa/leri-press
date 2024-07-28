@@ -49,3 +49,16 @@ function isAuthenticated(req, res, next) {
       res.render('create', { error: 'Invalid URL' });
     }
   });
+
+  router.get('/edit/:url', isAuthenticated, (req, res) => {
+    const url = req.params.url;
+    const content = Page.read(url);
+    res.render('edit', { url, content });
+  });
+
+  router.post('/edit/:url', isAuthenticated, (req, res) => {
+    const url = req.params.url;
+    const { content } = req.body;
+    Page.update(url, content);
+    res.redirect('/');
+  });
