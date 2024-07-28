@@ -35,3 +35,17 @@ function isAuthenticated(req, res, next) {
   router.get('/admin', isAuthenticated, (req, res) => {
     res.render('admin');
   });
+
+  router.get('/create', isAuthenticated, (req, res) => {
+    res.render('create');
+  });
+
+  router.post('/create', isAuthenticated, (req, res) => {
+    const { url, content } = req.body;
+    if (validator.isURL(url, { require_tld: false })) {
+      Page.create(url, content);
+      res.redirect('/');
+    } else {
+      res.render('create', { error: 'Invalid URL' });
+    }
+  });
