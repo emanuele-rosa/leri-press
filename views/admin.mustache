@@ -10,5 +10,15 @@
     <h1>Admin Dashboard</h1>
     <a href="/create">Create New Page</a>
     <a href="/logout">Logout</a>
+    <h2>All Pages</h2>
+    <ul>
+        {{#pages}}
+        <li>
+            <a href="/{{url}}">{{url}}</a> |
+            <a href="/edit/{{url}}">Edit</a> |
+            <a href="/delete/{{url}}">Delete</a>
+        </li>
+        {{/pages}}
+    </ul>
 </body>
 </html>
