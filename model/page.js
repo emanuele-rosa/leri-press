@@ -3,6 +3,10 @@ const path = require('path');
 
 const contentDir = path.join(__dirname, '../content');
 
+if (!fs.existsSync(contentDir)) {
+  fs.mkdirSync(contentDir, { recursive: true });
+}
+
 const Page = {
   create: (url, content) => {
     fs.writeFileSync(`${contentDir}/${url}.html`, content);

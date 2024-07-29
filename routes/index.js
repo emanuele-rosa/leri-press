@@ -79,3 +79,5 @@ function isAuthenticated(req, res, next) {
     const content = Page.read(url);
     res.render('page', { content });
   });
+
+  module.exports = router;
