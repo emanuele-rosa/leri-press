@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Page</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+    <h1>Edit Page</h1>
+    <form action="/edit/{{url}}" method="post">
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" rows="10" cols="30" required>{{content}}</textarea>
+        <br>
+        <button type="submit">Update Page</button>
+    </form>
+    <a href="/delete/{{url}}">Delete Page</a>
+</body>
+</html>
