@@ -35,7 +35,7 @@ O **LeriPress** é um sistema de gerenciamento de conteúdo (CMS) desenvolvido p
 
 ### Passos para rodar o projeto
 
-1. Crie e preencha o arquivo .env (se baseando no .env.template
+1. Crie e preencha o arquivo .env (se baseando no .env.template)
 2. Rode o script que inicializa o projeto através do comando
 
 ```npm start ```
