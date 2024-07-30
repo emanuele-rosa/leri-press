@@ -60,19 +60,25 @@ router.get("/edit/:url", isAuthenticated, (req, res) => {
 
 router.post("/edit/:url", isAuthenticated, (req, res) => {
   const oldUrl = req.params.url;
-  const { newUrl, content } = req.body;
-  if (validator.isURL(newUrl, { require_tld: false })) {
+  const { content } = req.body;
+  const newUrl = req.body.newUrl || oldUrl; // Adicionando suporte para atualizar URL (se necessário)
+
+  try {
     Page.update(oldUrl, newUrl, content);
     res.redirect("/");
-  } else {
-    res.render("edit", { url: oldUrl, content, error: "Invalid URL" });
+  } catch (error) {
+    res.render('edit', { url: oldUrl, content, error: 'Failed to update page' });
   }
 });
 
 router.get("/delete/:url", isAuthenticated, (req, res) => {
   const url = req.params.url;
-  Page.delete(url);
-  res.redirect("/admin");
+  try {
+    Page.delete(url);
+    res.redirect('/admin');
+  } catch (error) {
+    res.redirect('/admin');
+  }
 });
 
 router.get("/", (req, res) => {
@@ -82,6 +88,10 @@ router.get("/", (req, res) => {
 
 router.get("/:url", (req, res) => {
   const url = req.params.url;
-  const content = Page.read(url);
-  res.render("page", { content });
+  try {
+    const content = Page.read(url);
+    res.render('page', { content });
+  } catch (error) {
+    res.status(404).send('Page not found');
+  }
 });
