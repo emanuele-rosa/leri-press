@@ -3,12 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
-    <h1>Admin Dashboard</h1>
-    <a href="/create">Create New Page</a>
-    <a href="/logout">Logout</a>
+    <div class="container">
+        <header>
+            <h1>Admin Dashboard</h1>
+            <div class="nav-links">
+                <a href="/create">Create New Page</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </header>
+        <main>
+            <h2>All Pages</h2>
+            <ul class="page-list">
+                {{#pages}}
+                <li>
+                    <a href="/{{url}}">{{url}}</a> |
+                    <a href="/edit/{{url}}">Edit</a> |
+                    <a href="/delete/{{url}}">Delete</a>
+                </li>
+                {{/pages}}
+            </ul>
+        </main>
+      <a href="/">Back to Home</a>
+    </div>
 </body>
 </html>
