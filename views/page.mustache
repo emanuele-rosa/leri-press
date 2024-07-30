@@ -7,8 +7,18 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
-    <h1>Page Content</h1>
-    <div>{{{content}}}</div>
-    <a href="/">Back to Home</a>
+    <div class="container">
+        <header>
+            <h1>Page Content</h1>
+            <nav class="nav-links">
+                <a href="/">Back to Home</a>
+            </nav>
+        </header>
+        <main>
+            <div class="page-content">
+                {{{content}}}
+            </div>
+        </main>
+    </div>
 </body>
 </html>

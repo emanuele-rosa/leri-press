@@ -7,13 +7,21 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
-    <h1>All Pages</h1>
-    <ul>
-        {{#pages}}
-        <li><a href="/{{url}}">{{url}}</a></li>
-        {{/pages}}
-    </ul>
-    <a href="/admin">Admin Dashboard</a>
-    <a href="/">Back to Home</a>
+    <div class="container">
+        <header>
+            <h1>All Pages</h1>
+            <nav class="nav-links">
+                <a href="/admin">Admin Dashboard</a>
+                <a href="/">Back to Home</a>
+            </nav>
+        </header>
+        <main>
+            <ul class="page-list">
+                {{#pages}}
+                <li><a href="/{{url}}">{{url}}</a></li>
+                {{/pages}}
+            </ul>
+        </main>
+    </div>
 </body>
 </html>

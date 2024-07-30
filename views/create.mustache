@@ -7,19 +7,27 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
-    <h1>Create New Page</h1>
-    {{#error}}
-    <p style="color: red;">{{error}}</p>
-    {{/error}}
-    <form action="/create" method="post">
-        <label for="url">URL:</label>
-        <input type="text" id="url" name="url" required>
-        <br>
-        <label for="content">Content:</label>
-        <textarea id="content" name="content" rows="10" cols="30" required></textarea>
-        <br>
-        <button type="submit">Create Page</button>
-        <a href="/">Back to Home</a>
-    </form>
+        <div class="container">
+        <header>
+            <h1>Create New Page</h1>
+            <a href="/">Back to Home</a>
+        </header>
+        <main>
+            {{#error}}
+            <p class="error-message">{{error}}</p>
+            {{/error}}
+            <form action="/create" method="post" class="form">
+                <div class="form-group">
+                    <label for="url">URL:</label>
+                    <input type="text" id="url" name="url" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">Content:</label>
+                    <textarea id="content" name="content" rows="10" cols="30" required></textarea>
+                </div>
+                <button type="submit" class="btn">Create Page</button>
+            </form>
+        </main>
+    </div>
 </body>
 </html>
