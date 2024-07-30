@@ -1,7 +1,20 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const path = require("path");
 const Page = require("../model/page");
 const validator = require("validator");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../public/images"));
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
 
 function isAuthenticated(req, res, next) {
   if (req.session.user) {
@@ -42,10 +55,12 @@ router.get("/create", isAuthenticated, (req, res) => {
   res.render("create");
 });
 
-router.post("/create", isAuthenticated, (req, res) => {
-  const { url, content } = req.body;
+router.post("/create", isAuthenticated, upload.single("image"), (req, res) => {
+  const { url, title, content } = req.body;
+  const image = req.file ? `/images/${req.file.filename}` : null;
+
   if (validator.isURL(url, { require_tld: false })) {
-    Page.create(url, content);
+    Page.create(url, title, content, image);
     res.redirect("/");
   } else {
     res.render("create", { error: "Invalid URL" });
@@ -54,30 +69,46 @@ router.post("/create", isAuthenticated, (req, res) => {
 
 router.get("/edit/:url", isAuthenticated, (req, res) => {
   const url = req.params.url;
-  const content = Page.read(url);
-  res.render("edit", { url, content });
-});
-
-router.post("/edit/:url", isAuthenticated, (req, res) => {
-  const oldUrl = req.params.url;
-  const { content } = req.body;
-  const newUrl = req.body.newUrl || oldUrl; // Adicionando suporte para atualizar URL (se necessário)
-
   try {
-    Page.update(oldUrl, newUrl, content);
-    res.redirect("/");
+    const pageContent = Page.read(url);
+    const title = pageContent.match(/<h1>(.*?)<\/h1>/)[1];
+    const content = pageContent.replace(/<h1>.*<\/h1>/, "");
+    res.render("edit", { url, title, content });
   } catch (error) {
-    res.render('edit', { url: oldUrl, content, error: 'Failed to update page' });
+    res.status(404).send("Page not found");
   }
 });
+
+router.post(
+  "/edit/:url",
+  isAuthenticated,
+  upload.single("image"),
+  (req, res) => {
+    const oldUrl = req.params.url;
+    const { title, content, newUrl } = req.body;
+    const image = req.file ? `/images/${req.file.filename}` : null;
+
+    try {
+      Page.update(oldUrl, newUrl || oldUrl, title, content, image);
+      res.redirect("/");
+    } catch (error) {
+      res.render("edit", {
+        url: oldUrl,
+        title,
+        content,
+        error: "Failed to update page",
+      });
+    }
+  }
+);
 
 router.get("/delete/:url", isAuthenticated, (req, res) => {
   const url = req.params.url;
   try {
     Page.delete(url);
-    res.redirect('/admin');
+    res.redirect("/admin");
   } catch (error) {
-    res.redirect('/admin');
+    res.redirect("/admin");
   }
 });
 
@@ -89,9 +120,11 @@ router.get("/", (req, res) => {
 router.get("/:url", (req, res) => {
   const url = req.params.url;
   try {
-    const content = Page.read(url);
-    res.render('page', { content });
+    const pageContent = Page.read(url);
+    const title = pageContent.match(/<h1>(.*?)<\/h1>/)[1];
+    const content = pageContent.replace(/<h1>.*<\/h1>/, "");
+    res.render("page", { title, content });
   } catch (error) {
-    res.status(404).send('Page not found');
+    res.status(404).send("Page not found");
   }
 });

@@ -7,26 +7,35 @@ if (!fs.existsSync(contentDir)) {
 }
 
 const Page = {
-  create: (url, content) => {
-    fs.writeFileSync(`${contentDir}/${url}.html`, content);
+  create: (url, title, content, image) => {
+    const pageContent = `<h1>${title}</h1>${
+      image ? `<img src="${image}" alt="Image"><br>` : ""
+    }${content}`;
+    fs.writeFileSync(`${contentDir}/${url}.html`, pageContent);
   },
   read: (url) => {
     const filePath = `${contentDir}/${url}.html`;
     if (fs.existsSync(filePath)) {
-      return fs.readFileSync(filePath, 'utf8');
+      return fs.readFileSync(filePath, "utf8");
     } else {
-      throw new Error('Page not found');
+      throw new Error("Page not found");
     }
   },
-  update: (oldUrl, newUrl, content) => {
+  update: (oldUrl, newUrl, title, content, image) => {
     const oldFilePath = `${contentDir}/${oldUrl}.html`;
     const newFilePath = `${contentDir}/${newUrl}.html`;
 
+    const pageContent = `<h1>${title}</h1>${
+      image ? `<img src="${image}" alt="Image"><br>` : ""
+    }${content}`;
+
     if (fs.existsSync(oldFilePath)) {
-      fs.renameSync(oldFilePath, newFilePath);
-      fs.writeFileSync(newFilePath, content);
+      if (oldUrl !== newUrl) {
+        fs.renameSync(oldFilePath, newFilePath);
+      }
+      fs.writeFileSync(newFilePath, pageContent);
     } else {
-      throw new Error('Page not found');
+      throw new Error("Page not found");
     }
   },
   delete: (url) => {
@@ -34,7 +43,7 @@ const Page = {
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     } else {
-      throw new Error('Page not found');
+      throw new Error("Page not found");
     }
   },
   list: () => {
